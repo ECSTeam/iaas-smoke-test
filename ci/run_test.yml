@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: ecsteam/ubuntu-expect
+
+inputs:
+  - name: iaas-smoke-test
+
+# provided by pipeline.yml
+params:
+  host_name: host_name_unknown
+  host_user: host_user_unknown
+  host_password: host_password_unknown
+  host_path: host_path_unknown
+  host_prompt: host_prompt_unknown
+  host_platform: host_platform_unknown
+
+run:
+  path: iaas-smoke-test/ci/test.sh

@@ -1,0 +1,52 @@
+jobs:
+- name: iaas-smoke-test
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - get: iaas-smoke-test-release
+    - get: iaas-smoke-test
+  - aggregate:
+    - task: setup_host1
+      file: iaas-smoke-test/ci/setup_host.yml
+      params:
+        host_name: {{host1_name}}
+        host_user: {{host1_user}}
+        host_password: {{host1_password}}
+        host_path: {{host1_path}}
+        host_platform: {{host1_platform}}
+    - task: setup_host2
+      file: iaas-smoke-test/ci/setup_host.yml
+      params:
+        host_name: {{host2_name}}
+        host_user: {{host2_user}}
+        host_password: {{host2_password}}
+        host_path: {{host2_path}}
+        host_platform: {{host2_platform}}
+  - aggregate:
+    - task: run_test1
+      file: iaas-smoke-test/ci/run_test.yml
+      params:
+        host_name: {{host1_name}}
+        host_user: {{host1_user}}
+        host_password: {{host1_password}}
+        host_path: {{host1_path}}
+        host_platform: {{host1_platform}}
+    - task: run_test2
+      file: iaas-smoke-test/ci/run_test.yml
+      params:
+        host_name: {{host2_name}}
+        host_user: {{host2_user}}
+        host_password: {{host2_password}}
+        host_path: {{host2_path}}
+        host_platform: {{host2_platform}}
+resources:
+- name: iaas-smoke-test-release
+  type: github-release
+  source:
+    user: ECSTeam
+    repository: IaaSSmokeTest
+- name: iaas-smoke-test
+  type: git
+  source:
+    uri: {{git_repo}}
